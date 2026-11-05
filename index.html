@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IT Help Desk</title>
+<script src="https://res.cdn.office.net/teams-js/2.22.0/js/MicrosoftTeams.min.js"></script>
+<style>
+  :root { --bg:#f5f5f5; --card:#fff; --text:#242424; --muted:#616161; --blue:#0052CC; --blue-h:#0747A6; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#1f1f1f; --card:#292929; --text:#fff; --muted:#adadad; } }
+  body.theme-dark { --bg:#1f1f1f; --card:#292929; --text:#fff; --muted:#adadad; }
+  * { box-sizing:border-box; }
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+         background:var(--bg); color:var(--text); font-family:"Segoe UI",system-ui,sans-serif; padding:16px; }
+  .card { background:var(--card); border-radius:12px; padding:36px 32px; max-width:440px; width:100%;
+          text-align:center; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+  h1 { font-size:22px; margin:12px 0 6px; }
+  p { color:var(--muted); margin:0 0 24px; line-height:1.4; }
+  .btn { display:block; width:100%; padding:12px 16px; margin:10px 0 0; border-radius:6px; border:0;
+         font:600 15px "Segoe UI",system-ui,sans-serif; cursor:pointer; text-decoration:none; }
+  .primary { background:var(--blue); color:#fff; } .primary:hover { background:var(--blue-h); }
+  .secondary { background:transparent; color:var(--blue); border:1px solid var(--blue); }
+  body.theme-dark .secondary { color:#8fb8ff; border-color:#8fb8ff; }
+  .note { font-size:12px; margin:20px 0 0; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <svg width="56" height="56" viewBox="0 0 192 192" aria-hidden="true">
+      <rect width="192" height="192" rx="36" fill="#0052CC"/>
+      <rect x="34" y="58" width="124" height="76" rx="9" fill="#fff"/>
+      <circle cx="34" cy="96" r="12" fill="#0052CC"/><circle cx="158" cy="96" r="12" fill="#0052CC"/>
+      <path d="M118 64v64" stroke="#0052CC" stroke-width="4" stroke-dasharray="6 6"/>
+      <path d="M51 85h50M51 96h50M51 107h35" stroke="#0052CC" stroke-width="7"/>
+    </svg>
+    <h1>IT Help Desk</h1>
+    <p>Submit a new request or check on the ones you've already sent to IT.</p>
+    <a class="btn primary" id="newReq" href="https://doveschoolsok.atlassian.net/servicedesk/customer/portals" target="_blank" rel="noopener">Get IT help</a>
+    <a class="btn secondary" id="myReq" href="https://doveschoolsok.atlassian.net/servicedesk/customer/user/requests" target="_blank" rel="noopener">My requests</a>
+    <p class="note">Opens the help desk in your browser.</p>
+  </div>
+<script>
+  var inTeams = false;
+  try {
+    microsoftTeams.app.initialize().then(function () {
+      inTeams = true;
+      microsoftTeams.app.notifySuccess();
+      microsoftTeams.app.getContext().then(function (ctx) {
+        var t = ctx && ctx.app && ctx.app.theme;
+        if (t === "dark" || t === "contrast") document.body.classList.add("theme-dark");
+      });
+    }).catch(function () {});
+  } catch (e) {}
+
+  function open(e) {
+    if (!inTeams) return; // normal link behaviour outside Teams
+    e.preventDefault();
+    var url = e.currentTarget.href;
+    microsoftTeams.app.openLink(url).catch(function () { window.open(url, "_blank"); });
+  }
+  document.getElementById("newReq").addEventListener("click", open);
+  document.getElementById("myReq").addEventListener("click", open);
+</script>
+</body>
+</html>
